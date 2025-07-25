@@ -1,11 +1,13 @@
-// src/main.jsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import App       from './App';
-import Dashboard from './Dashboard';
-import Login     from './pages/Login';
-import Register  from './pages/Register';
+
+import Home       from './pages/Home';
+import App        from './App';
+import Dashboard  from './Dashboard';
+import Login      from './pages/Login';
+import Register   from './pages/Register';
+
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 function PrivateRoute({ children }) {
@@ -18,10 +20,16 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login />} />
+          {/* Page d’accueil publique */}
+          <Route path="/" element={<Home />} />
+
+          {/* Authentification */}
+          <Route path="/login"    element={<Login />} />
           <Route path="/register" element={<Register />} />
+
+          {/* Pages protégées */}
           <Route
-            path="/"
+            path="/clients"
             element={
               <PrivateRoute>
                 <App />
@@ -36,6 +44,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
               </PrivateRoute>
             }
           />
+
+          {/* Redirection par défaut */}
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
